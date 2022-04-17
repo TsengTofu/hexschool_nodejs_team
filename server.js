@@ -26,8 +26,26 @@ const requestListener = (req, res) => {
   // 判斷路由後，需要對 MongoDB 執行的操作
   if (req.url === '/posts' && req.method === 'GET') {
     // 取得全部貼文 API
+    console.log('GET 取得全部貼文資料 API');
+    res.writeHead(200, headers);
+    res.write(JSON.stringify(
+      {
+        status: 'success',
+        data: '已成功 Call GET 取得全部貼文資料 API',
+      },
+    ));
+    res.end();
   } else if (req.url === '/posts' && req.method === 'POST') {
     // 新增貼文 API
+    console.log('POST 新增一筆貼文資料 API');
+    res.writeHead(200, headers);
+    res.write(JSON.stringify(
+      {
+        status: 'success',
+        data: '已成功 Call POST 新增一筆貼文資料 API',
+      },
+    ));
+    res.end();
   } else if (req.method === 'OPTIONS') {
     res.writeHead(200, headers);
     res.end();
