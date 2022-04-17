@@ -7,7 +7,7 @@ const postSchema = new mongoose.Schema(
     user_image: String,
     content_message: String,
     content_image: String,
-    createdAt: {
+    created_at: {
       type: Date,
       default: Date.now,
     },
