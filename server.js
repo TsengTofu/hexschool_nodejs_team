@@ -1,4 +1,5 @@
 const http = require('http');
+const url = require('url');
 const mongoose = require('mongoose');
 const dotenv = require('dotenv');
 const PostModel = require('./Models/post');
@@ -22,11 +23,25 @@ const headers = {
   'Content-Type': 'application/json',
 };
 
-const requestListener = (req, res) => {
+const requestListener = async (req, res) => {
   // 判斷路由後，需要對 MongoDB 執行的操作
-  if (req.url === '/posts' && req.method === 'GET') {
+  if (req.url.startsWith('/posts') && req.method === 'GET') {
     // 取得全部貼文 API
     console.log('GET 取得全部貼文資料 API');
+    const queryObject = url.parse(req.url, true).query;
+    // console.log(queryObject, 'queryObject');
+    const { sort, nameKeyword, contentKeyword } = queryObject;
+    // 1. 驗證 sort 是否只有 asc or desc
+    // 2. 驗證 keyword 是否有奇怪符號
+    // desc 大到小 asc 小到大
+    // Room.find({}).sort({date: 'desc'});
+    const temp = await PostModel.find({
+      content_message: { $regex: `${contentKeyword}` },
+      user_name: { $regex: `${nameKeyword}` },
+    }).sort({ created_at: sort });
+    console.log(temp, 'temp');
+    // const result = await PostModel.find();
+    // console.log(result, 'result');
     res.writeHead(200, headers);
     res.write(JSON.stringify(
       {
