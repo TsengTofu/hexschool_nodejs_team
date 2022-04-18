@@ -23,6 +23,10 @@ const headers = {
 };
 
 const requestListener = (req, res) => {
+  let body = '';
+  req.on('data', chunk => {
+    body += chunk;
+  });
   // 判斷路由後，需要對 MongoDB 執行的操作
   if (req.url === '/posts' && req.method === 'GET') {
     // 取得全部貼文 API
@@ -37,15 +41,36 @@ const requestListener = (req, res) => {
     res.end();
   } else if (req.url === '/posts' && req.method === 'POST') {
     // 新增貼文 API
-    console.log('POST 新增一筆貼文資料 API');
-    res.writeHead(200, headers);
-    res.write(JSON.stringify(
-      {
-        status: 'success',
-        data: '已成功 Call POST 新增一筆貼文資料 API',
-      },
-    ));
-    res.end();
+    req.on('end', async () => {
+      try {
+        const data = JSON.parse(body)
+        if(data.message && data.message.trim()) {
+          await PostModel.create({
+            user_name: '測試人員',
+            user_image: 'https://www.niusnews.com/upload/imgs/default/16JulP/0722BB/7.png',
+            content_message: data.message,
+            content_image: data.image
+          });
+          console.log('POST 新增一筆貼文資料 API');
+          res.writeHead(200, headers);
+          res.write(JSON.stringify(
+            {
+              status: 'success',
+              data: '已成功 Call POST 新增一筆貼文資料 API',
+            },
+          ));
+          res.end();
+        } else {
+          res.writeHead(400, headers);
+          res.write(JSON.stringify({ status: 'false', data: '貼文內容不可為空' }));
+          res.end();
+        }
+      } catch (err) {
+        res.writeHead(400, headers);
+        res.write(JSON.stringify({ status: 'false', data: '發生未知錯誤' }));
+        res.end();
+      }
+    });
   } else if (req.method === 'OPTIONS') {
     res.writeHead(200, headers);
     res.end();
