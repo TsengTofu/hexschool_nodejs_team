@@ -1,7 +1,7 @@
 const http = require('http');
 const mongoose = require('mongoose');
 const dotenv = require('dotenv');
-const postPostsAPI = require('./postPostsAPI')
+const createPostsAPI = require('./createPostsAPI')
 
 dotenv.config();
 // 資料庫位置
@@ -37,7 +37,7 @@ const requestListener = (req, res) => {
     res.end();
   } else if (req.url === '/posts' && req.method === 'POST') {
     // 新增貼文 API
-    postPostsAPI(req, res)
+    createPostsAPI(req, res)
   } else if (req.method === 'OPTIONS') {
     res.writeHead(200, headers);
     res.end();
