@@ -1,7 +1,7 @@
 const http = require('http');
 const mongoose = require('mongoose');
 const dotenv = require('dotenv');
-const createPostsAPI = require('./createPostsAPI');
+const createPostsAPI = require('./Routes/createPostAPI');
 const getAllPostAPI = require('./Routes/getAllPostAPI');
 
 dotenv.config();
@@ -31,7 +31,7 @@ const requestListener = async (req, res) => {
     getAllPostAPI(req, res, headers);
   } else if (req.url === '/posts' && req.method === 'POST') {
     // 新增貼文 API
-    createPostsAPI(req, res)
+    createPostsAPI(req, res);
   } else if (req.method === 'OPTIONS') {
     res.writeHead(200, headers);
     res.end();
