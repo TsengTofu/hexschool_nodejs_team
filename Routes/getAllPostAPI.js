@@ -10,7 +10,6 @@ const getAllPostAPI = async (req, res, headers) => {
   const isQueryEmpty = queryObject
   && Object.keys(queryObject).length === 0;
   if (!isQueryEmpty) {
-    // 有 sort 的情境
     if (sortConstantConfig.includes(sort)) {
       const sortData = await PostModel.find({
         content_message: { $regex: `${contentKeyword}` },
@@ -18,7 +17,6 @@ const getAllPostAPI = async (req, res, headers) => {
       }).sort({ created_at: sort });
       successResponse(res, headers, sortData);
     } else {
-      // 沒有 sort 的情境
       const pureData = await PostModel.find({
         content_message: { $regex: `${contentKeyword}` },
         user_name: { $regex: `${nameKeyword}` },
@@ -26,7 +24,6 @@ const getAllPostAPI = async (req, res, headers) => {
       successResponse(res, headers, pureData);
     }
   } else {
-    // 單純撈資料
     const allData = await PostModel.find();
     successResponse(res, headers, allData);
   }

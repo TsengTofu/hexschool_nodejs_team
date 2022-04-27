@@ -1,6 +1,5 @@
 const mongoose = require('mongoose');
 
-// To Owen，有需要都可以更動
 const postSchema = new mongoose.Schema(
   {
     user_name: String,
