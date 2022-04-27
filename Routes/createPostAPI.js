@@ -22,7 +22,6 @@ const postPostsAPI = (req, res) => {
           content_message: data.contentMessage,
           content_image: data.contentImage ? data.contentImage.trim() : null,
         });
-        console.log('POST 新增一筆貼文資料 API');
         res.writeHead(200, headers);
         res.write(JSON.stringify(
           {
