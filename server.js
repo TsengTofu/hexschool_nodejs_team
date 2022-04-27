@@ -1,6 +1,7 @@
 const http = require('http');
 const mongoose = require('mongoose');
 const dotenv = require('dotenv');
+const createPostsAPI = require('./Routes/createPostAPI');
 const getAllPostAPI = require('./Routes/getAllPostAPI');
 
 dotenv.config();
@@ -30,15 +31,7 @@ const requestListener = async (req, res) => {
     getAllPostAPI(req, res, headers);
   } else if (req.url === '/posts' && req.method === 'POST') {
     // 新增貼文 API
-    console.log('POST 新增一筆貼文資料 API');
-    res.writeHead(200, headers);
-    res.write(JSON.stringify(
-      {
-        status: 'success',
-        data: '已成功 Call POST 新增一筆貼文資料 API',
-      },
-    ));
-    res.end();
+    createPostsAPI(req, res);
   } else if (req.method === 'OPTIONS') {
     res.writeHead(200, headers);
     res.end();
